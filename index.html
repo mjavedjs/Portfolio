@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Javed - Cloud Data Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#03070f;
+  --cyan:#00e5ff;
+  --gold:#fbbf24;
+  --text:#94b8d4;
+}
+body{
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg);
+  color:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+  z-index:0;
+}
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 30%, rgba(0,229,255,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 85% 70%, rgba(124,58,237,0.1) 0%, transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+canvas{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  z-index:1;
+  pointer-events:none;
+}
+.cursor-glow{
+  position:fixed;
+  width:300px;height:300px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(0,229,255,0.04) 0%, transparent 70%);
+  pointer-events:none;
+  z-index:3;
+  transform:translate(-50%,-50%);
+  transition:all 0.05s ease;
+}
+.particles-container{
+  position:fixed;inset:0;
+  pointer-events:none;z-index:2;overflow:hidden;
+}
+.particle{
+  position:absolute;border-radius:50%;
+  animation:float-particle linear infinite;opacity:0;
+}
+@keyframes float-particle{
+  0%{transform:translateY(100vh) scale(0);opacity:0;}
+  10%{opacity:1;}
+  90%{opacity:0.5;}
+  100%{transform:translateY(-50px) scale(1);opacity:0;}
+}
+/* PAGE */
+.page{
+  position:relative;z-index:10;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:40px 20px 60px;
+}
+/* HERO */
+.hero{
+  text-align:center;
+  margin-bottom:50px;
+  perspective:1000px;
+  transition:transform 0.1s ease;
+}
+/* 3D TEXT */
+.name-3d{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1.8rem,5.5vw,4rem);
+  font-weight:900;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:#fff;
+  text-shadow:
+    0 1px 0 #ccc,0 2px 0 #bbb,0 3px 0 #aaa,
+    0 4px 0 #999,0 5px 0 #888,0 6px 0 #777,
+    0 8px 10px rgba(0,229,255,0.5),
+    0 0 30px rgba(0,229,255,0.4),
+    0 0 60px rgba(0,229,255,0.2);
+  transform:rotateX(10deg);
+  transition:all 0.4s ease;
+  cursor:default;
+  margin-bottom:12px;
+  line-height:1.15;
+}
+.name-3d:hover{
+  transform:rotateX(0deg) scale(1.05);
+  text-shadow:
+    0 1px 0 #ccc,0 2px 0 #bbb,0 3px 0 #aaa,
+    0 4px 0 #999,0 5px 0 #888,0 6px 0 #777,
+    0 10px 15px rgba(0,229,255,0.7),
+    0 0 50px rgba(0,229,255,0.8),
+    0 0 100px rgba(0,229,255,0.4);
+}
+.title-3d{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(0.75rem,2vw,1.2rem);
+  font-weight:700;
+  letter-spacing:5px;
+  text-transform:uppercase;
+  color:var(--gold);
+  text-shadow:
+    0 2px 0 rgba(251,191,36,0.5),
+    0 4px 10px rgba(251,191,36,0.4),
+    0 0 30px rgba(251,191,36,0.2);
+  transform:rotateX(8deg);
+  transition:all 0.4s ease;
+  cursor:default;
+  margin-bottom:20px;
+}
+.title-3d:hover{
+  transform:rotateX(0deg) scale(1.03);
+  text-shadow:
+    0 2px 0 rgba(251,191,36,0.8),
+    0 6px 15px rgba(251,191,36,0.6),
+    0 0 50px rgba(251,191,36,0.5);
+}
+.tagline{
+  font-size:clamp(0.85rem,1.8vw,1rem);
+  font-weight:400;
+  color:var(--text);
+  max-width:580px;
+  margin:0 auto 25px;
+  line-height:1.7;
+  letter-spacing:0.3px;
+}
+.social{
+  display:flex;justify-content:center;gap:16px;
+}
+.social a{
+  width:44px;height:44px;
+  border:1px solid rgba(0,229,255,0.3);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cyan);
+  text-decoration:none;
+  transition:all 0.3s ease;
+  background:rgba(0,229,255,0.05);
+}
+.social a:hover{
+  background:rgba(0,229,255,0.15);
+  border-color:var(--cyan);
+  transform:translateY(-5px) scale(1.15);
+  box-shadow:0 8px 20px rgba(0,229,255,0.35);
+}
+/* SECTION LABEL */
+.section-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:0.65rem;
+  letter-spacing:5px;
+  color:var(--cyan);
+  text-transform:uppercase;
+  margin-bottom:18px;
+  opacity:0.8;
+  text-align:center;
+}
+/* SCROLL ICONS */
+.tech-row-section{
+  width:100%;max-width:920px;
+  overflow:hidden;
+  margin-bottom:50px;
+  position:relative;
+}
+.tech-row-section::before,.tech-row-section::after{
+  content:'';position:absolute;
+  top:0;bottom:0;width:80px;
+  z-index:5;pointer-events:none;
+}
+.tech-row-section::before{left:0;background:linear-gradient(to right,var(--bg),transparent);}
+.tech-row-section::after{right:0;background:linear-gradient(to left,var(--bg),transparent);}
+.tech-scroll-track{
+  display:flex;gap:14px;
+  animation:scroll-left 22s linear infinite;
+  width:max-content;
+}
+.tech-scroll-track:hover{animation-play-state:paused;}
+@keyframes scroll-left{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+.scroll-icon{
+  width:82px;height:82px;
+  background:rgba(8,20,40,0.85);
+  border:1px solid rgba(0,229,255,0.2);
+  border-radius:14px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:all 0.35s ease;
+  flex-shrink:0;
+  backdrop-filter:blur(10px);
+}
+.scroll-icon img{
+  width:36px;height:36px;
+  object-fit:contain;
+  transition:all 0.35s ease;
+  filter:drop-shadow(0 0 3px rgba(0,229,255,0.2));
+}
+.scroll-icon span{
+  font-size:0.58rem;font-weight:600;
+  letter-spacing:0.5px;
+  color:var(--text);
+  margin-top:5px;
+  text-transform:uppercase;
+  transition:0.3s;
+}
+.scroll-icon:hover{
+  background:rgba(0,229,255,0.1);
+  border-color:var(--cyan);
+  transform:translateY(-8px) scale(1.12);
+  box-shadow:0 12px 30px rgba(0,229,255,0.3),0 0 20px rgba(0,229,255,0.1);
+}
+.scroll-icon:hover img{filter:drop-shadow(0 0 10px rgba(0,229,255,0.8));}
+.scroll-icon:hover span{color:#fff;}
+/* PIPELINE */
+.pipeline-card{
+  width:100%;max-width:920px;
+  background:rgba(8,20,40,0.7);
+  border:1px solid rgba(0,229,255,0.15);
+  border-radius:16px;
+  padding:26px 28px;
+  transition:all 0.4s ease;
+  cursor:default;
+  backdrop-filter:blur(10px);
+  margin-bottom:50px;
+}
+.pipeline-card:hover{
+  border-color:rgba(0,229,255,0.35);
+  transform:translateY(-5px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.4),0 0 20px rgba(0,229,255,0.08);
+}
+.pipeline-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:0.65rem;letter-spacing:4px;
+  color:var(--cyan);text-transform:uppercase;
+  margin-bottom:18px;
+}
+.pipeline-flow{
+  display:flex;align-items:center;
+  justify-content:center;flex-wrap:wrap;gap:8px;
+}
+.pipe-step{
+  background:rgba(0,229,255,0.06);
+  border:1px solid rgba(0,229,255,0.2);
+  border-radius:10px;padding:10px 14px;
+  text-align:center;
+  transition:all 0.3s ease;min-width:90px;
+}
+.pipe-step:hover{
+  background:rgba(0,229,255,0.14);
+  border-color:var(--cyan);
+  transform:scale(1.07);
+  box-shadow:0 0 15px rgba(0,229,255,0.3);
+}
+.pipe-step-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:0.58rem;font-weight:700;
+  letter-spacing:2px;color:var(--gold);
+  text-transform:uppercase;margin-bottom:4px;
+}
+.pipe-step-text{font-size:0.74rem;color:var(--text);}
+.gold-step{border-color:rgba(251,191,36,0.25);}
+.gold-step:hover{border-color:var(--gold);box-shadow:0 0 15px rgba(251,191,36,0.3);}
+.pipe-arrow{
+  color:var(--cyan);font-size:1.3rem;opacity:0.6;
+  animation:arrow-pulse 1.5s ease-in-out infinite;
+}
+.pipe-arrow-gold{color:var(--gold);}
+@keyframes arrow-pulse{
+  0%,100%{opacity:0.4;}50%{opacity:1;}
+}
+.two-pipes{
+  display:flex;gap:24px;flex-wrap:wrap;justify-content:center;
+}
+.pipe-col{flex:1;min-width:220px;}
+.pipe-divider{
+  width:1px;
+  background:rgba(0,229,255,0.12);
+  margin:0 4px;
+}
+/* INFO CARDS */
+.cards-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px;
+  width:100%;max-width:920px;
+  margin-bottom:50px;
+}
+.info-card{
+  background:rgba(8,20,40,0.7);
+  border:1px solid rgba(0,229,255,0.15);
+  border-radius:16px;
+  padding:22px 20px;
+  transition:all 0.4s ease;
+  cursor:default;
+  position:relative;overflow:hidden;
+  backdrop-filter:blur(10px);
+}
+.info-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  opacity:0;transition:opacity 0.3s ease;
+}
+.info-card:hover::before{opacity:1;}
+.info-card:hover{
+  border-color:rgba(0,229,255,0.4);
+  transform:translateY(-8px) rotateX(4deg);
+  box-shadow:0 20px 40px rgba(0,0,0,0.5),0 0 30px rgba(0,229,255,0.1);
+}
+.card-icon{font-size:1.8rem;margin-bottom:12px;}
+.card-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:0.65rem;font-weight:700;
+  letter-spacing:3px;color:var(--cyan);
+  text-transform:uppercase;margin-bottom:8px;
+}
+.card-text{font-size:0.88rem;color:var(--text);line-height:1.65;}
+.card-text strong{color:#fff;font-weight:600;}
+/* ENGINEERS */
+.engineers-section{
+  width:100%;max-width:920px;margin-bottom:50px;
+}
+.eng-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
+}
+.eng-card{
+  background:rgba(8,20,40,0.7);
+  border:1px solid rgba(251,191,36,0.2);
+  border-radius:14px;padding:22px 20px;
+  transition:all 0.4s ease;cursor:default;
+  backdrop-filter:blur(10px);
+  position:relative;overflow:hidden;
+}
+.eng-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transition:0.3s;
+}
+.eng-card:hover::before{opacity:1;}
+.eng-card:hover{
+  border-color:rgba(251,191,36,0.5);
+  transform:translateY(-8px) rotateX(3deg);
+  box-shadow:0 20px 40px rgba(0,0,0,0.5),0 0 25px rgba(251,191,36,0.1);
+}
+.eng-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:0.7rem;font-weight:700;
+  letter-spacing:2px;color:var(--gold);
+  text-transform:uppercase;margin-bottom:8px;
+}
+.eng-desc{font-size:0.9rem;color:var(--text);line-height:1.55;}
+.eng-desc strong{color:#fff;}
+/* FOOTER */
+.footer{
+  font-family:'Orbitron',sans-serif;
+  font-size:0.52rem;letter-spacing:3px;
+  color:rgba(148,184,212,0.3);
+  text-transform:uppercase;margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="particles-container" id="particles"></div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero" id="hero">
+    <div class="name-3d">Muhammad Javed</div>
+    <div class="title-3d">Aspiring Cloud Data Engineer</div>
+    <p class="tagline">
+      Turning raw data into actionable insights. Experienced with Python, SQL, Pandas, NumPy, AWS, Snowflake, and MERN Stack. Building ETL &amp; ELT pipelines and scalable cloud solutions.
+    </p>
+    <div class="social">
+      <a href="https://www.facebook.com/" target="_blank" title="Facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/" target="_blank" title="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/Muhammad-javed-500b07318" target="_blank" title="LinkedIn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="https://github.com/" target="_blank" title="GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- TECH SCROLL -->
+  <p class="section-label">⚡ Tech Stack — Hover to Pause</p>
+  <div class="tech-row-section">
+    <div class="tech-scroll-track" id="scrollTrack"></div>
+  </div>
+
+  <!-- PIPELINE -->
+  <p class="section-label">⚙️ Data Pipeline Architecture</p>
+  <div class="pipeline-card">
+    <div class="two-pipes">
+      <div class="pipe-col">
+        <div class="pipeline-title">ETL Pipeline</div>
+        <div class="pipeline-flow">
+          <div class="pipe-step"><div class="pipe-step-label">Extract</div><div class="pipe-step-text">SQL Server / APIs</div></div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step"><div class="pipe-step-label">Transform</div><div class="pipe-step-text">Python / Pandas</div></div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step"><div class="pipe-step-label">Load</div><div class="pipe-step-text">Snowflake / S3</div></div>
+        </div>
+      </div>
+      <div class="pipe-divider"></div>
+      <div class="pipe-col">
+        <div class="pipeline-title" style="color:var(--gold);">ELT Pipeline</div>
+        <div class="pipeline-flow">
+          <div class="pipe-step gold-step"><div class="pipe-step-label">Extract</div><div class="pipe-step-text">Raw Sources</div></div>
+          <div class="pipe-arrow pipe-arrow-gold">→</div>
+          <div class="pipe-step gold-step"><div class="pipe-step-label">Load</div><div class="pipe-step-text">Data Warehouse</div></div>
+          <div class="pipe-arrow pipe-arrow-gold">→</div>
+          <div class="pipe-step gold-step"><div class="pipe-step-label">Transform</div><div class="pipe-step-text">dbt / Snowflake</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO CARDS -->
+  <p class="section-label">🌐 Core Expertise</p>
+  <div class="cards-row">
+    <div class="info-card">
+      <div class="card-icon">☁️</div>
+      <div class="card-title">Cloud Platforms</div>
+      <div class="card-text"><strong>AWS</strong> — S3, Glue, Lambda, Redshift, EC2<br><strong>Snowflake</strong> — Data Warehousing, Time Travel, Data Sharing</div>
+    </div>
+    <div class="info-card">
+      <div class="card-icon">🗄️</div>
+      <div class="card-title">Databases</div>
+      <div class="card-text"><strong>SQL Server</strong> — Queries, Stored Procedures, SSMS<br><strong>MongoDB</strong> — NoSQL, Aggregation<br><strong>MySQL</strong> — Relational DBs</div>
+    </div>
+    <div class="info-card">
+      <div class="card-icon">🐍</div>
+      <div class="card-title">Data Engineering</div>
+      <div class="card-text"><strong>Python</strong>, Pandas, NumPy<br>ETL / ELT Pipeline Design<br>Apache Airflow, Data Modeling</div>
+    </div>
+    <div class="info-card">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">MERN Stack</div>
+      <div class="card-text"><strong>MongoDB, Express, React, Node.js</strong><br>Full-stack apps for data-driven solutions</div>
+    </div>
+  </div>
+
+  <!-- FAMOUS ENGINEERS -->
+  <div class="engineers-section">
+    <p class="section-label">🏆 Inspiring Data Engineers</p>
+    <div class="eng-cards">
+      <div class="eng-card">
+        <div class="eng-name">⭐ Maxime Beauchemin</div>
+        <div class="eng-desc">Creator of <strong>Apache Airflow</strong> — the world's most popular workflow orchestration platform used by data engineers globally.</div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-name">⭐ Jeff Hammerbacher</div>
+        <div class="eng-desc">Early <strong>Facebook Data Engineer</strong> who pioneered modern data infrastructure and co-founded Cloudera.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Muhammad Javed &nbsp;·&nbsp; Cloud Data Engineer &nbsp;·&nbsp; 2025</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script>
+// CURSOR GLOW
+const cg = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  cg.style.left = e.clientX + 'px';
+  cg.style.top = e.clientY + 'px';
+});
+
+// PARTICLES
+const pc = document.getElementById('particles');
+for(let i = 0; i < 18; i++){
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random()*3+1;
+  const hue = Math.random()>0.5?'195':'50';
+  p.style.cssText = `width:${size}px;height:${size}px;background:hsl(${hue},100%,70%);left:${Math.random()*100}%;animation-duration:${Math.random()*10+8}s;animation-delay:${Math.random()*10}s;box-shadow:0 0 ${size*3}px hsl(${hue},100%,70%);`;
+  pc.appendChild(p);
+}
+
+// THREE.JS BACKGROUND
+const canvas = document.getElementById('bg-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+const starGeo = new THREE.BufferGeometry();
+const pos = new Float32Array(600*3);
+for(let i = 0; i < 600*3; i++) pos[i] = (Math.random()-0.5)*200;
+starGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0x88ccff,size:0.3,transparent:true,opacity:0.5})));
+
+const sphere = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(2.5,1),
+  new THREE.MeshBasicMaterial({color:0x00e5ff,wireframe:true,transparent:true,opacity:0.05})
+);
+sphere.position.set(0,0,-5);
+scene.add(sphere);
+camera.position.z = 5;
+
+let mx=0,my=0;
+document.addEventListener('mousemove',e=>{mx=(e.clientX/window.innerWidth-0.5)*0.5;my=(e.clientY/window.innerHeight-0.5)*0.5;});
+
+(function animate(){
+  requestAnimationFrame(animate);
+  sphere.rotation.y+=0.003;sphere.rotation.x+=0.001;
+  camera.position.x+=(mx-camera.position.x)*0.02;
+  camera.position.y+=(-my-camera.position.y)*0.02;
+  camera.lookAt(scene.position);
+  renderer.render(scene,camera);
+})();
+
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+
+// TECH SCROLL ICONS
+const techList = [
+  {name:'Python',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'},
+  {name:'SQL',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg'},
+  {name:'Pandas',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg'},
+  {name:'NumPy',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg'},
+  {name:'AWS',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg'},
+  {name:'Snowflake',img:'https://www.vectorlogo.zone/logos/snowflake/snowflake-icon.svg'},
+  {name:'SQL Server',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg'},
+  {name:'React',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg'},
+  {name:'Node.js',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg'},
+  {name:'MongoDB',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg'},
+  {name:'Express',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg'},
+  {name:'Git',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg'},
+];
+const track = document.getElementById('scrollTrack');
+[...techList,...techList].forEach(tech=>{
+  const el = document.createElement('div');
+  el.className = 'scroll-icon';
+  el.innerHTML = `<img src="${tech.img}" alt="${tech.name}" onerror="this.style.display='none'"><span>${tech.name}</span>`;
+  track.appendChild(el);
+});
+
+// GSAP ANIMATIONS
+gsap.from('.name-3d',{opacity:0,y:-60,rotationX:30,duration:1.2,ease:'power4.out'});
+gsap.from('.title-3d',{opacity:0,y:-30,duration:1,delay:0.4,ease:'power3.out'});
+gsap.from('.tagline',{opacity:0,y:-20,duration:1,delay:0.7,ease:'power3.out'});
+gsap.from('.social',{opacity:0,y:20,duration:1,delay:1,ease:'power3.out'});
+gsap.from('.tech-row-section',{opacity:0,y:30,duration:1,delay:1.2,ease:'power3.out'});
+gsap.from('.pipeline-card',{opacity:0,y:30,duration:1,delay:1.4,ease:'power3.out'});
+gsap.from('.info-card',{opacity:0,y:30,duration:0.8,stagger:0.15,delay:1.6,ease:'power3.out'});
+gsap.from('.eng-card',{opacity:0,x:-30,duration:0.8,stagger:0.2,delay:2,ease:'power3.out'});
+
+// 3D TILT HERO
+const hero = document.getElementById('hero');
+document.addEventListener('mousemove',e=>{
+  const rx=(e.clientY/window.innerHeight-0.5)*10;
+  const ry=(e.clientX/window.innerWidth-0.5)*-10;
+  hero.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+});
+</script>
+</body>
+</html>
