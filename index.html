@@ -3,601 +3,1832 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Muhammad Javed - Cloud Data Engineer</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<title>Muhammad Javed — Cloud Data Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#03070f;
-  --cyan:#00e5ff;
-  --gold:#fbbf24;
-  --text:#94b8d4;
+  --bg:#060C1A;
+  --bg2:#0A1628;
+  --bg3:#0F1E35;
+  --cyan:#00D4FF;
+  --snow:#29B5E8;
+  --dbt:#FF694A;
+  --kafka:#231F20;
+  --kafka-accent:#60B5CC;
+  --green:#00E5A0;
+  --text:#8BABC8;
+  --text-bright:#C8DFF0;
+  --white:#F0F6FF;
+  --border:rgba(0,212,255,0.12);
+  --border-hover:rgba(0,212,255,0.35);
+  --glass:rgba(10,22,40,0.75);
 }
+html{scroll-behavior:smooth;}
 body{
-  font-family:'Rajdhani',sans-serif;
+  font-family:'Space Grotesk',sans-serif;
   background:var(--bg);
-  color:#fff;
+  color:var(--white);
   min-height:100vh;
   overflow-x:hidden;
-  position:relative;
 }
+
+/* GRID BG */
 body::before{
   content:'';
-  position:fixed;
-  inset:0;
-  background-image:
-    linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
-  background-size:60px 60px;
-  pointer-events:none;
-  z-index:0;
-}
-body::after{
-  content:'';
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(ellipse 70% 50% at 15% 30%, rgba(0,229,255,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 70% at 85% 70%, rgba(124,58,237,0.1) 0%, transparent 60%);
-  pointer-events:none;
-  z-index:0;
-}
-canvas{
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  z-index:1;
-  pointer-events:none;
-}
-.cursor-glow{
-  position:fixed;
-  width:300px;height:300px;
-  border-radius:50%;
-  background:radial-gradient(circle, rgba(0,229,255,0.04) 0%, transparent 70%);
-  pointer-events:none;
-  z-index:3;
-  transform:translate(-50%,-50%);
-  transition:all 0.05s ease;
-}
-.particles-container{
   position:fixed;inset:0;
-  pointer-events:none;z-index:2;overflow:hidden;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;z-index:0;
 }
-.particle{
-  position:absolute;border-radius:50%;
-  animation:float-particle linear infinite;opacity:0;
+
+/* RADIAL GLOWS */
+.bg-glow{
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%,rgba(0,212,255,0.06) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 60% at 80% 80%,rgba(41,181,232,0.05) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 30% at 50% 50%,rgba(255,105,74,0.03) 0%,transparent 60%);
+  pointer-events:none;z-index:0;
 }
-@keyframes float-particle{
-  0%{transform:translateY(100vh) scale(0);opacity:0;}
-  10%{opacity:1;}
-  90%{opacity:0.5;}
-  100%{transform:translateY(-50px) scale(1);opacity:0;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(6,12,26,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
 }
-/* PAGE */
-.page{
+.nav-logo{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.85rem;font-weight:500;
+  color:var(--cyan);letter-spacing:2px;
+}
+.nav-links{
+  display:flex;gap:32px;list-style:none;
+}
+.nav-links a{
+  font-size:0.78rem;font-weight:500;
+  letter-spacing:1px;text-transform:uppercase;
+  color:var(--text);text-decoration:none;
+  transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--cyan);}
+.nav-cta{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.75rem;font-weight:500;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--bg);background:var(--cyan);
+  padding:9px 20px;border-radius:6px;
+  text-decoration:none;
+  transition:all 0.25s ease;
+  box-shadow:0 0 20px rgba(0,212,255,0.3);
+}
+.nav-cta:hover{background:#fff;box-shadow:0 0 30px rgba(0,212,255,0.6);}
+
+/* HERO */
+.hero{
   position:relative;z-index:10;
   min-height:100vh;
   display:flex;flex-direction:column;
-  align-items:center;
-  padding:40px 20px 60px;
-}
-/* HERO */
-.hero{
+  align-items:center;justify-content:center;
+  padding:120px 24px 60px;
   text-align:center;
-  margin-bottom:50px;
-  perspective:1000px;
-  transition:transform 0.1s ease;
 }
-/* 3D TEXT */
-.name-3d{
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(1.8rem,5.5vw,4rem);
-  font-weight:900;
-  letter-spacing:4px;
-  text-transform:uppercase;
-  color:#fff;
-  text-shadow:
-    0 1px 0 #ccc,0 2px 0 #bbb,0 3px 0 #aaa,
-    0 4px 0 #999,0 5px 0 #888,0 6px 0 #777,
-    0 8px 10px rgba(0,229,255,0.5),
-    0 0 30px rgba(0,229,255,0.4),
-    0 0 60px rgba(0,229,255,0.2);
-  transform:rotateX(10deg);
-  transition:all 0.4s ease;
-  cursor:default;
-  margin-bottom:12px;
-  line-height:1.15;
-}
-.name-3d:hover{
-  transform:rotateX(0deg) scale(1.05);
-  text-shadow:
-    0 1px 0 #ccc,0 2px 0 #bbb,0 3px 0 #aaa,
-    0 4px 0 #999,0 5px 0 #888,0 6px 0 #777,
-    0 10px 15px rgba(0,229,255,0.7),
-    0 0 50px rgba(0,229,255,0.8),
-    0 0 100px rgba(0,229,255,0.4);
-}
-.title-3d{
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(0.75rem,2vw,1.2rem);
-  font-weight:700;
-  letter-spacing:5px;
-  text-transform:uppercase;
-  color:var(--gold);
-  text-shadow:
-    0 2px 0 rgba(251,191,36,0.5),
-    0 4px 10px rgba(251,191,36,0.4),
-    0 0 30px rgba(251,191,36,0.2);
-  transform:rotateX(8deg);
-  transition:all 0.4s ease;
-  cursor:default;
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem;font-weight:400;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--cyan);opacity:0.8;
   margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
 }
-.title-3d:hover{
-  transform:rotateX(0deg) scale(1.03);
-  text-shadow:
-    0 2px 0 rgba(251,191,36,0.8),
-    0 6px 15px rgba(251,191,36,0.6),
-    0 0 50px rgba(251,191,36,0.5);
+.hero-eyebrow::before,.hero-eyebrow::after{
+  content:'';display:block;
+  width:40px;height:1px;
+  background:var(--cyan);opacity:0.4;
 }
-.tagline{
-  font-size:clamp(0.85rem,1.8vw,1rem);
+.hero-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(2.4rem,6vw,5rem);
+  font-weight:700;letter-spacing:-1.5px;
+  line-height:1.05;
+  color:var(--white);
+  margin-bottom:8px;
+}
+.hero-name span{
+  background:linear-gradient(135deg,var(--cyan) 0%,var(--snow) 50%,#7EC8E3 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(0.8rem,1.8vw,1.1rem);
   font-weight:400;
+  color:var(--dbt);
+  letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:28px;
+}
+.hero-headline{
+  font-size:clamp(1rem,2.5vw,1.5rem);
+  font-weight:500;
+  color:var(--text-bright);
+  max-width:680px;line-height:1.5;
+  margin:0 auto 16px;
+}
+.hero-sub{
+  font-size:clamp(0.8rem,1.5vw,0.95rem);
   color:var(--text);
-  max-width:580px;
-  margin:0 auto 25px;
-  line-height:1.7;
-  letter-spacing:0.3px;
+  max-width:700px;line-height:1.8;
+  margin:0 auto 40px;
+  font-family:'JetBrains Mono',monospace;
+  font-weight:300;
 }
-.social{
-  display:flex;justify-content:center;gap:16px;
+.hero-sub .tag{
+  color:var(--cyan);font-weight:500;
 }
-.social a{
-  width:44px;height:44px;
-  border:1px solid rgba(0,229,255,0.3);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--cyan);
-  text-decoration:none;
-  transition:all 0.3s ease;
-  background:rgba(0,229,255,0.05);
+
+/* PIPELINE ANIMATION CANVAS */
+#pipeline-canvas{
+  position:absolute;bottom:0;left:0;right:0;
+  height:180px;pointer-events:none;
+  z-index:1;
+  opacity:0.7;
 }
-.social a:hover{
-  background:rgba(0,229,255,0.15);
-  border-color:var(--cyan);
-  transform:translateY(-5px) scale(1.15);
-  box-shadow:0 8px 20px rgba(0,229,255,0.35);
+
+/* HERO METRICS */
+.hero-metrics{
+  display:flex;gap:40px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:40px;
+  position:relative;z-index:2;
 }
-/* SECTION LABEL */
-.section-label{
-  font-family:'Orbitron',sans-serif;
-  font-size:0.65rem;
-  letter-spacing:5px;
-  color:var(--cyan);
-  text-transform:uppercase;
-  margin-bottom:18px;
-  opacity:0.8;
+.metric{
   text-align:center;
 }
-/* SCROLL ICONS */
-.tech-row-section{
-  width:100%;max-width:920px;
-  overflow:hidden;
-  margin-bottom:50px;
+.metric-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.8rem;font-weight:700;
+  color:var(--cyan);
+  line-height:1;
+}
+.metric-label{
+  font-size:0.7rem;font-weight:500;
+  color:var(--text);letter-spacing:2px;
+  text-transform:uppercase;margin-top:4px;
+}
+
+/* HERO ACTIONS */
+.hero-actions{
+  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  position:relative;z-index:2;
+}
+.btn-primary{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.78rem;font-weight:500;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--bg);background:var(--cyan);
+  padding:13px 28px;border-radius:8px;
+  text-decoration:none;
+  transition:all 0.25s ease;
+  box-shadow:0 0 24px rgba(0,212,255,0.35);
+}
+.btn-primary:hover{background:#fff;box-shadow:0 0 40px rgba(0,212,255,0.7);transform:translateY(-2px);}
+.btn-secondary{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.78rem;font-weight:500;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--cyan);
+  padding:13px 28px;border-radius:8px;
+  text-decoration:none;border:1px solid var(--border-hover);
+  transition:all 0.25s ease;background:transparent;
+}
+.btn-secondary:hover{background:rgba(0,212,255,0.08);transform:translateY(-2px);}
+
+/* SECTION BASE */
+section{position:relative;z-index:10;padding:90px 24px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.section-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;font-weight:500;
+  letter-spacing:5px;text-transform:uppercase;
+  color:var(--cyan);opacity:0.7;
+  margin-bottom:10px;
+}
+.section-title{
+  font-size:clamp(1.5rem,3.5vw,2.4rem);
+  font-weight:700;letter-spacing:-0.5px;
+  margin-bottom:14px;color:var(--white);
+}
+.section-desc{
+  font-size:0.95rem;color:var(--text);
+  max-width:560px;line-height:1.75;margin-bottom:50px;
+}
+
+/* TECH STACK */
+.tech-section{background:var(--bg2);}
+.tech-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+}
+.tech-category{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px 18px;
+  backdrop-filter:blur(12px);
+  transition:all 0.3s ease;
+}
+.tech-category:hover{
+  border-color:var(--border-hover);
+  transform:translateY(-4px);
+  box-shadow:0 16px 40px rgba(0,0,0,0.4),0 0 20px rgba(0,212,255,0.06);
+}
+.tech-cat-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.58rem;font-weight:500;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--dbt);margin-bottom:12px;
+}
+.tech-items{display:flex;flex-direction:column;gap:8px;}
+.tech-item{
+  display:flex;align-items:center;gap:10px;
+  font-size:0.82rem;font-weight:500;
+  color:var(--text-bright);
+}
+.tech-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--cyan);flex-shrink:0;
+  box-shadow:0 0 8px rgba(0,212,255,0.7);
+}
+.tech-dot.orange{background:var(--dbt);box-shadow:0 0 8px rgba(255,105,74,0.7);}
+.tech-dot.green{background:var(--green);box-shadow:0 0 8px rgba(0,229,160,0.7);}
+.tech-dot.snow{background:var(--snow);box-shadow:0 0 8px rgba(41,181,232,0.7);}
+
+/* PIPELINE ARCHITECTURE */
+.pipeline-section{background:var(--bg);}
+.arch-card{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:36px;
+  backdrop-filter:blur(16px);
+  margin-bottom:24px;
+}
+.arch-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem;font-weight:500;
+  letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:28px;
+  display:flex;align-items:center;gap:10px;
+}
+.arch-title.etl{color:var(--cyan);}
+.arch-title.elt{color:var(--dbt);}
+.arch-title.stream{color:var(--green);}
+.pipe-flow{
+  display:flex;align-items:stretch;
+  gap:0;flex-wrap:wrap;
+}
+.pipe-node{
+  flex:1;min-width:120px;
+  background:rgba(0,212,255,0.04);
+  border:1px solid rgba(0,212,255,0.15);
+  border-radius:10px;
+  padding:16px 14px;
+  text-align:center;
+  transition:all 0.3s ease;
   position:relative;
 }
-.tech-row-section::before,.tech-row-section::after{
-  content:'';position:absolute;
-  top:0;bottom:0;width:80px;
-  z-index:5;pointer-events:none;
-}
-.tech-row-section::before{left:0;background:linear-gradient(to right,var(--bg),transparent);}
-.tech-row-section::after{right:0;background:linear-gradient(to left,var(--bg),transparent);}
-.tech-scroll-track{
-  display:flex;gap:14px;
-  animation:scroll-left 22s linear infinite;
-  width:max-content;
-}
-.tech-scroll-track:hover{animation-play-state:paused;}
-@keyframes scroll-left{
-  0%{transform:translateX(0);}
-  100%{transform:translateX(-50%);}
-}
-.scroll-icon{
-  width:82px;height:82px;
-  background:rgba(8,20,40,0.85);
-  border:1px solid rgba(0,229,255,0.2);
-  border-radius:14px;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  cursor:pointer;
-  transition:all 0.35s ease;
-  flex-shrink:0;
-  backdrop-filter:blur(10px);
-}
-.scroll-icon img{
-  width:36px;height:36px;
-  object-fit:contain;
-  transition:all 0.35s ease;
-  filter:drop-shadow(0 0 3px rgba(0,229,255,0.2));
-}
-.scroll-icon span{
-  font-size:0.58rem;font-weight:600;
-  letter-spacing:0.5px;
-  color:var(--text);
-  margin-top:5px;
-  text-transform:uppercase;
-  transition:0.3s;
-}
-.scroll-icon:hover{
-  background:rgba(0,229,255,0.1);
+.pipe-node:hover{
+  background:rgba(0,212,255,0.1);
   border-color:var(--cyan);
-  transform:translateY(-8px) scale(1.12);
-  box-shadow:0 12px 30px rgba(0,229,255,0.3),0 0 20px rgba(0,229,255,0.1);
+  transform:scale(1.04);
+  box-shadow:0 0 20px rgba(0,212,255,0.2);
 }
-.scroll-icon:hover img{filter:drop-shadow(0 0 10px rgba(0,229,255,0.8));}
-.scroll-icon:hover span{color:#fff;}
-/* PIPELINE */
-.pipeline-card{
-  width:100%;max-width:920px;
-  background:rgba(8,20,40,0.7);
-  border:1px solid rgba(0,229,255,0.15);
-  border-radius:16px;
-  padding:26px 28px;
-  transition:all 0.4s ease;
-  cursor:default;
-  backdrop-filter:blur(10px);
-  margin-bottom:50px;
+.pipe-node.orange{
+  background:rgba(255,105,74,0.04);
+  border-color:rgba(255,105,74,0.15);
 }
-.pipeline-card:hover{
-  border-color:rgba(0,229,255,0.35);
-  transform:translateY(-5px);
-  box-shadow:0 20px 50px rgba(0,0,0,0.4),0 0 20px rgba(0,229,255,0.08);
+.pipe-node.orange:hover{
+  background:rgba(255,105,74,0.1);
+  border-color:var(--dbt);
+  box-shadow:0 0 20px rgba(255,105,74,0.2);
 }
-.pipeline-title{
-  font-family:'Orbitron',sans-serif;
-  font-size:0.65rem;letter-spacing:4px;
-  color:var(--cyan);text-transform:uppercase;
-  margin-bottom:18px;
+.pipe-node.green{
+  background:rgba(0,229,160,0.04);
+  border-color:rgba(0,229,160,0.15);
 }
-.pipeline-flow{
-  display:flex;align-items:center;
-  justify-content:center;flex-wrap:wrap;gap:8px;
+.pipe-node.green:hover{
+  background:rgba(0,229,160,0.1);
+  border-color:var(--green);
+  box-shadow:0 0 20px rgba(0,229,160,0.2);
 }
-.pipe-step{
-  background:rgba(0,229,255,0.06);
-  border:1px solid rgba(0,229,255,0.2);
-  border-radius:10px;padding:10px 14px;
-  text-align:center;
-  transition:all 0.3s ease;min-width:90px;
+.pipe-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.5rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:6px;
 }
-.pipe-step:hover{
-  background:rgba(0,229,255,0.14);
-  border-color:var(--cyan);
-  transform:scale(1.07);
-  box-shadow:0 0 15px rgba(0,229,255,0.3);
-}
-.pipe-step-label{
-  font-family:'Orbitron',sans-serif;
-  font-size:0.58rem;font-weight:700;
-  letter-spacing:2px;color:var(--gold);
-  text-transform:uppercase;margin-bottom:4px;
-}
-.pipe-step-text{font-size:0.74rem;color:var(--text);}
-.gold-step{border-color:rgba(251,191,36,0.25);}
-.gold-step:hover{border-color:var(--gold);box-shadow:0 0 15px rgba(251,191,36,0.3);}
+.pipe-badge.orange{color:var(--dbt);}
+.pipe-badge.green{color:var(--green);}
+.pipe-label{font-size:0.78rem;font-weight:600;color:var(--white);margin-bottom:4px;}
+.pipe-sub{font-size:0.65rem;color:var(--text);font-family:'JetBrains Mono',monospace;}
 .pipe-arrow{
-  color:var(--cyan);font-size:1.3rem;opacity:0.6;
-  animation:arrow-pulse 1.5s ease-in-out infinite;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 6px;flex-shrink:0;
+  font-size:1rem;color:var(--cyan);opacity:0.5;
+  animation:pulse-arrow 2s ease-in-out infinite;
 }
-.pipe-arrow-gold{color:var(--gold);}
-@keyframes arrow-pulse{
-  0%,100%{opacity:0.4;}50%{opacity:1;}
+.pipe-arrow.orange{color:var(--dbt);}
+.pipe-arrow.green{color:var(--green);}
+@keyframes pulse-arrow{0%,100%{opacity:0.3;}50%{opacity:0.9;}}
+.pipe-flows-grid{
+  display:grid;gap:16px;
 }
-.two-pipes{
-  display:flex;gap:24px;flex-wrap:wrap;justify-content:center;
-}
-.pipe-col{flex:1;min-width:220px;}
-.pipe-divider{
-  width:1px;
-  background:rgba(0,229,255,0.12);
-  margin:0 4px;
-}
-/* INFO CARDS */
-.cards-row{
+
+/* PROJECTS */
+.projects-section{background:var(--bg2);}
+.projects-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:18px;
-  width:100%;max-width:920px;
-  margin-bottom:50px;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:20px;
 }
-.info-card{
-  background:rgba(8,20,40,0.7);
-  border:1px solid rgba(0,229,255,0.15);
-  border-radius:16px;
-  padding:22px 20px;
-  transition:all 0.4s ease;
-  cursor:default;
+.project-card{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:28px 24px;
+  backdrop-filter:blur(12px);
+  transition:all 0.35s ease;
   position:relative;overflow:hidden;
-  backdrop-filter:blur(10px);
+  display:flex;flex-direction:column;
 }
-.info-card::before{
+.project-card::before{
   content:'';position:absolute;
   top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-  opacity:0;transition:opacity 0.3s ease;
+  opacity:0;transition:opacity 0.3s;
 }
-.info-card:hover::before{opacity:1;}
-.info-card:hover{
-  border-color:rgba(0,229,255,0.4);
-  transform:translateY(-8px) rotateX(4deg);
-  box-shadow:0 20px 40px rgba(0,0,0,0.5),0 0 30px rgba(0,229,255,0.1);
+.project-card:hover::before{opacity:1;}
+.project-card:hover{
+  border-color:var(--border-hover);
+  transform:translateY(-6px);
+  box-shadow:0 24px 50px rgba(0,0,0,0.5),0 0 30px rgba(0,212,255,0.07);
 }
-.card-icon{font-size:1.8rem;margin-bottom:12px;}
-.card-title{
-  font-family:'Orbitron',sans-serif;
-  font-size:0.65rem;font-weight:700;
+.project-card.featured{
+  grid-column:span 2;
+}
+.project-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;font-weight:500;
   letter-spacing:3px;color:var(--cyan);
-  text-transform:uppercase;margin-bottom:8px;
+  opacity:0.5;margin-bottom:12px;
 }
-.card-text{font-size:0.88rem;color:var(--text);line-height:1.65;}
-.card-text strong{color:#fff;font-weight:600;}
-/* ENGINEERS */
-.engineers-section{
-  width:100%;max-width:920px;margin-bottom:50px;
+.project-title{
+  font-size:1.05rem;font-weight:700;
+  color:var(--white);margin-bottom:8px;letter-spacing:-0.2px;
 }
-.eng-cards{
+.project-desc{
+  font-size:0.85rem;color:var(--text);
+  line-height:1.7;margin-bottom:18px;flex:1;
+}
+.project-stack{
+  display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;
+}
+.stack-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;font-weight:500;
+  letter-spacing:0.5px;
+  padding:4px 10px;border-radius:4px;
+  background:rgba(0,212,255,0.07);
+  border:1px solid rgba(0,212,255,0.18);
+  color:var(--cyan);
+  transition:all 0.2s;
+}
+.stack-tag:hover{background:rgba(0,212,255,0.15);}
+.stack-tag.orange{
+  background:rgba(255,105,74,0.07);
+  border-color:rgba(255,105,74,0.2);
+  color:var(--dbt);
+}
+.stack-tag.green{
+  background:rgba(0,229,160,0.07);
+  border-color:rgba(0,229,160,0.2);
+  color:var(--green);
+}
+.project-metrics{
+  display:flex;gap:20px;padding-top:14px;
+  border-top:1px solid var(--border);
+}
+.proj-metric{
+  text-align:left;
+}
+.proj-metric-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.95rem;font-weight:700;
+  color:var(--cyan);
+}
+.proj-metric-lbl{
+  font-size:0.62rem;color:var(--text);
+  text-transform:uppercase;letter-spacing:1px;
+}
+
+/* MEDALLION ARCHITECTURE */
+.medallion-section{background:var(--bg);}
+.medallion-flow{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  max-width:800px;margin:0 auto;
+}
+.medallion-layer{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px 20px;
+  text-align:center;
+  transition:all 0.3s ease;
+  backdrop-filter:blur(10px);
+  position:relative;
+}
+.medallion-layer:hover{
+  transform:translateY(-6px);
+  box-shadow:0 20px 40px rgba(0,0,0,0.4);
+}
+.medallion-layer.bronze{border-color:rgba(205,127,50,0.3);}
+.medallion-layer.bronze:hover{border-color:rgba(205,127,50,0.6);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 20px rgba(205,127,50,0.1);}
+.medallion-layer.silver{border-color:rgba(192,192,192,0.3);}
+.medallion-layer.silver:hover{border-color:rgba(192,192,192,0.5);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 20px rgba(192,192,192,0.1);}
+.medallion-layer.gold{border-color:rgba(255,215,0,0.3);}
+.medallion-layer.gold:hover{border-color:rgba(255,215,0,0.5);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 20px rgba(255,215,0,0.1);}
+.layer-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.4rem;margin-bottom:10px;
+}
+.layer-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.layer-name.bronze{color:#CD7F32;}
+.layer-name.silver{color:#C0C0C0;}
+.layer-name.gold{color:#FFD700;}
+.layer-title{font-size:0.9rem;font-weight:600;color:var(--white);margin-bottom:8px;}
+.layer-desc{font-size:0.75rem;color:var(--text);line-height:1.6;}
+
+/* GITHUB */
+.github-section{background:var(--bg2);}
+.github-loading{
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.85rem;color:var(--text);
+  padding:40px;
+}
+.repos-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
   gap:16px;
 }
-.eng-card{
-  background:rgba(8,20,40,0.7);
-  border:1px solid rgba(251,191,36,0.2);
-  border-radius:14px;padding:22px 20px;
-  transition:all 0.4s ease;cursor:default;
+.repo-card{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:12px;padding:22px 20px;
   backdrop-filter:blur(10px);
-  position:relative;overflow:hidden;
+  transition:all 0.3s ease;
+  text-decoration:none;color:inherit;
+  display:block;
 }
-.eng-card::before{
-  content:'';position:absolute;
-  top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  opacity:0;transition:0.3s;
+.repo-card:hover{
+  border-color:var(--border-hover);
+  transform:translateY(-4px);
+  box-shadow:0 16px 40px rgba(0,0,0,0.4),0 0 20px rgba(0,212,255,0.06);
 }
-.eng-card:hover::before{opacity:1;}
-.eng-card:hover{
-  border-color:rgba(251,191,36,0.5);
-  transform:translateY(-8px) rotateX(3deg);
-  box-shadow:0 20px 40px rgba(0,0,0,0.5),0 0 25px rgba(251,191,36,0.1);
+.repo-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.8rem;font-weight:500;
+  color:var(--cyan);margin-bottom:8px;
 }
-.eng-name{
-  font-family:'Orbitron',sans-serif;
-  font-size:0.7rem;font-weight:700;
-  letter-spacing:2px;color:var(--gold);
-  text-transform:uppercase;margin-bottom:8px;
+.repo-desc{font-size:0.82rem;color:var(--text);line-height:1.6;margin-bottom:14px;}
+.repo-meta{
+  display:flex;gap:16px;flex-wrap:wrap;
 }
-.eng-desc{font-size:0.9rem;color:var(--text);line-height:1.55;}
-.eng-desc strong{color:#fff;}
+.repo-lang{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;color:var(--text);
+  display:flex;align-items:center;gap:5px;
+}
+.lang-dot{width:8px;height:8px;border-radius:50%;}
+.repo-stars{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;color:var(--text);
+}
+.github-profile-link{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:28px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.8rem;color:var(--cyan);
+  text-decoration:none;
+  transition:color 0.2s;
+}
+.github-profile-link:hover{color:#fff;}
+
+/* PREVIOUS EXPERIENCE */
+.prev-section{background:var(--bg);}
+.prev-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:14px;
+  opacity:0.75;
+}
+.prev-card{
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:10px;padding:20px 18px;
+  backdrop-filter:blur(10px);
+  transition:all 0.3s ease;
+}
+.prev-card:hover{
+  border-color:rgba(255,255,255,0.1);
+  transform:translateY(-3px);
+}
+.prev-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.55rem;font-weight:500;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--text);opacity:0.6;margin-bottom:8px;
+}
+.prev-title{font-size:0.88rem;font-weight:600;color:var(--text-bright);margin-bottom:6px;}
+.prev-desc{font-size:0.78rem;color:var(--text);line-height:1.6;}
+
+/* CONTACT */
+.contact-section{background:var(--bg2);}
+.contact-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start;
+}
+.contact-text .big{
+  font-size:clamp(1.5rem,4vw,2.5rem);
+  font-weight:700;letter-spacing:-0.5px;
+  line-height:1.2;margin-bottom:16px;
+  color:var(--white);
+}
+.contact-text .big span{color:var(--cyan);}
+.contact-links{display:flex;flex-direction:column;gap:14px;margin-top:28px;}
+.contact-link{
+  display:flex;align-items:center;gap:14px;
+  text-decoration:none;color:var(--text);
+  font-size:0.9rem;font-weight:500;
+  padding:14px 18px;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:10px;
+  transition:all 0.3s ease;
+  backdrop-filter:blur(10px);
+}
+.contact-link:hover{
+  color:var(--white);border-color:var(--border-hover);
+  transform:translateX(6px);
+  background:rgba(0,212,255,0.06);
+}
+.contact-link-icon{
+  width:36px;height:36px;border-radius:8px;
+  background:rgba(0,212,255,0.08);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cyan);flex-shrink:0;
+}
+.skill-bars{display:flex;flex-direction:column;gap:16px;}
+.skill-bar-item{display:flex;flex-direction:column;gap:6px;}
+.skill-bar-top{
+  display:flex;justify-content:space-between;
+  font-size:0.78rem;font-weight:500;
+  color:var(--text-bright);
+}
+.skill-bar-bg{
+  height:4px;background:rgba(255,255,255,0.07);
+  border-radius:2px;overflow:hidden;
+}
+.skill-bar-fill{
+  height:100%;border-radius:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--snow));
+  box-shadow:0 0 10px rgba(0,212,255,0.5);
+  transition:width 1.5s cubic-bezier(0.4,0,0.2,1);
+  width:0;
+}
+.skill-bar-fill.orange{
+  background:linear-gradient(90deg,var(--dbt),#FF9A80);
+  box-shadow:0 0 10px rgba(255,105,74,0.5);
+}
+
 /* FOOTER */
-.footer{
-  font-family:'Orbitron',sans-serif;
-  font-size:0.52rem;letter-spacing:3px;
-  color:rgba(148,184,212,0.3);
-  text-transform:uppercase;margin-top:20px;
+footer{
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  padding:32px 24px;
+  text-align:center;
+}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-logo{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem;font-weight:500;
+  color:var(--cyan);letter-spacing:3px;
+  margin-bottom:8px;
+}
+.footer-text{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;color:var(--text);
+  opacity:0.4;letter-spacing:2px;
+}
+
+/* SCROLL REVEAL */
+.reveal{
+  opacity:0;transform:translateY(30px);
+  transition:opacity 0.8s ease,transform 0.8s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:0.1s;}
+.reveal-delay-2{transition-delay:0.2s;}
+.reveal-delay-3{transition-delay:0.3s;}
+.reveal-delay-4{transition-delay:0.4s;}
+
+/* DIVIDER */
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:0 24px;
+}
+
+/* STATUS BADGE */
+.status-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;font-weight:500;
+  letter-spacing:1px;
+  color:var(--green);
+  background:rgba(0,229,160,0.08);
+  border:1px solid rgba(0,229,160,0.2);
+  padding:6px 14px;border-radius:100px;
+  margin-bottom:24px;
+}
+.status-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  animation:pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{box-shadow:0 0 0 0 rgba(0,229,160,0.6);}
+  50%{box-shadow:0 0 0 6px rgba(0,229,160,0);}
+}
+
+/* ============================================
+   MOBILE-FIRST RESPONSIVE SYSTEM
+   320px → 640px → 768px → 1024px → 1440px+
+   ============================================ */
+
+/* --- HAMBURGER BUTTON --- */
+.hamburger{
+  display:none;
+  flex-direction:column;justify-content:center;align-items:center;
+  width:44px;height:44px;
+  background:rgba(0,212,255,0.07);
+  border:1px solid var(--border);
+  border-radius:10px;
+  cursor:pointer;gap:5px;
+  transition:all 0.25s ease;
+  flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+  z-index:200;
+}
+.hamburger:hover{background:rgba(0,212,255,0.14);border-color:var(--border-hover);}
+.hamburger span{
+  display:block;width:20px;height:2px;
+  background:var(--cyan);border-radius:2px;
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+  transform-origin:center;
+}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* --- MOBILE DRAWER --- */
+.mobile-drawer{
+  display:none;
+  position:fixed;top:0;right:0;
+  width:min(320px,85vw);height:100vh;
+  background:rgba(6,12,26,0.97);
+  backdrop-filter:blur(30px);
+  border-left:1px solid var(--border);
+  z-index:150;
+  transform:translateX(100%);
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  overflow-y:auto;
+  padding:80px 32px 40px;
+  flex-direction:column;
+  gap:0;
+}
+.mobile-drawer.open{transform:translateX(0);}
+.mobile-drawer-overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:140;
+  opacity:0;
+  transition:opacity 0.3s ease;
+  backdrop-filter:blur(4px);
+}
+.mobile-drawer-overlay.open{opacity:1;}
+.mobile-nav-links{
+  list-style:none;
+  display:flex;flex-direction:column;gap:4px;
+  margin-bottom:32px;
+}
+.mobile-nav-links li a{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:1rem;font-weight:500;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-bright);text-decoration:none;
+  padding:14px 0;
+  border-bottom:1px solid rgba(0,212,255,0.08);
+  transition:all 0.2s ease;
+}
+.mobile-nav-links li a:hover{color:var(--cyan);padding-left:8px;}
+.mobile-drawer .nav-cta{
+  display:block;text-align:center;
+  padding:14px 24px;font-size:0.8rem;
+}
+.mobile-drawer-logo{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem;color:var(--cyan);
+  letter-spacing:3px;margin-bottom:40px;
+  opacity:0.7;
+}
+
+/* ---- BREAKPOINT: LARGE DESKTOP 1440px+ ---- */
+@media(min-width:1440px){
+  .section-inner{max-width:1280px;}
+  section{padding:110px 40px;}
+  .hero{padding:140px 40px 80px;}
+  .tech-grid{grid-template-columns:repeat(6,1fr);}
+  .projects-grid{grid-template-columns:repeat(3,1fr);}
+  .project-card.featured{grid-column:span 2;}
+  .repos-grid{grid-template-columns:repeat(3,1fr);}
+}
+
+/* ---- BREAKPOINT: TABLET LANDSCAPE 1024px ---- */
+@media(max-width:1024px){
+  .tech-grid{grid-template-columns:repeat(3,1fr);}
+  .projects-grid{grid-template-columns:repeat(2,1fr);}
+  .project-card.featured{grid-column:span 2;}
+  .medallion-flow{grid-template-columns:repeat(3,1fr);}
+  .contact-grid{gap:36px;}
+}
+
+/* ---- BREAKPOINT: TABLET PORTRAIT 768px ---- */
+@media(max-width:768px){
+  /* NAV → HAMBURGER */
+  nav{padding:14px 20px;}
+  .nav-links{display:none;}
+  .nav-cta{display:none;}
+  .hamburger{display:flex;}
+  .mobile-drawer{display:flex;}
+  .mobile-drawer-overlay{display:block;}
+
+  /* HERO */
+  .hero{
+    padding:100px 20px 160px;
+    min-height:100svh;
+  }
+  .hero-eyebrow{font-size:0.62rem;letter-spacing:3px;}
+  .hero-eyebrow::before,.hero-eyebrow::after{width:24px;}
+  .hero-name{letter-spacing:-0.5px;line-height:1.1;}
+  .hero-title{
+    font-size:clamp(0.65rem,2.2vw,0.85rem);
+    letter-spacing:2px;
+    line-height:1.6;
+    white-space:normal;
+    word-break:break-word;
+  }
+  .hero-headline{
+    font-size:clamp(1rem,3.5vw,1.3rem);
+    line-height:1.6;
+    padding:0 4px;
+  }
+  .hero-sub{
+    font-size:0.78rem;
+    line-height:1.9;
+    padding:0 4px;
+  }
+  .hero-metrics{
+    gap:20px 28px;
+    padding:20px;
+    background:rgba(0,212,255,0.03);
+    border:1px solid var(--border);
+    border-radius:14px;
+    width:100%;
+  }
+  .metric-value{font-size:1.5rem;}
+  .metric-label{font-size:0.62rem;letter-spacing:1px;}
+  .hero-actions{
+    flex-direction:column;
+    width:100%;
+    gap:10px;
+  }
+  .btn-primary,.btn-secondary{
+    width:100%;text-align:center;
+    padding:15px 24px;
+    font-size:0.78rem;
+  }
+  #pipeline-canvas{height:120px;opacity:0.5;}
+
+  /* SECTIONS */
+  section{padding:60px 18px;}
+  .section-title{font-size:clamp(1.3rem,5vw,1.8rem);}
+  .section-desc{font-size:0.88rem;margin-bottom:32px;}
+
+  /* TECH GRID */
+  .tech-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .tech-category{padding:16px 14px;}
+  .tech-item{font-size:0.78rem;}
+
+  /* PIPELINE ARCH */
+  .arch-card{padding:20px 16px;}
+  .pipe-flow{flex-direction:column;align-items:stretch;gap:8px;}
+  .pipe-arrow{
+    transform:rotate(90deg);
+    padding:2px 0;
+    height:20px;
+  }
+  .pipe-node{min-width:unset;padding:14px 12px;}
+
+  /* PROJECTS */
+  .projects-grid{grid-template-columns:1fr;gap:14px;}
+  .project-card.featured{grid-column:span 1;}
+  .project-card{padding:22px 18px;}
+  .project-title{font-size:0.98rem;}
+  .project-desc{font-size:0.82rem;}
+  .stack-tag{font-size:0.58rem;padding:4px 8px;}
+  .project-metrics{flex-wrap:wrap;gap:12px;}
+
+  /* MEDALLION */
+  .medallion-flow{grid-template-columns:1fr;max-width:100%;gap:10px;}
+  .medallion-layer{padding:20px 16px;}
+
+  /* GITHUB */
+  .repos-grid{grid-template-columns:1fr;}
+  .github-profile-link{font-size:0.72rem;}
+  .repo-card{padding:18px 16px;}
+
+  /* PREV */
+  .prev-grid{grid-template-columns:1fr;gap:10px;}
+
+  /* CONTACT */
+  .contact-grid{grid-template-columns:1fr;gap:36px;}
+  .contact-text .big{font-size:clamp(1.4rem,6vw,2rem);}
+  .contact-link{padding:14px 16px;font-size:0.85rem;}
+  .contact-link-icon{width:32px;height:32px;}
+  .skill-bars{gap:14px;}
+
+  /* STATUS BADGE */
+  .status-badge{font-size:0.6rem;padding:6px 12px;}
+}
+
+/* ---- BREAKPOINT: MOBILE 480px ---- */
+@media(max-width:480px){
+  nav{padding:12px 16px;}
+  .nav-logo{font-size:0.75rem;letter-spacing:1.5px;}
+
+  .hero{padding:88px 16px 140px;}
+  .hero-metrics{
+    grid-template-columns:1fr 1fr;
+    display:grid;gap:16px;
+  }
+  .hero-actions{gap:8px;}
+
+  .tech-grid{grid-template-columns:1fr;gap:8px;}
+
+  .arch-card{padding:16px 14px;border-radius:12px;}
+  .pipe-node{padding:12px 10px;}
+  .pipe-label{font-size:0.72rem;}
+  .pipe-sub{font-size:0.6rem;}
+
+  .project-card{padding:18px 14px;border-radius:12px;}
+  .project-metrics{flex-direction:column;gap:8px;}
+  .proj-metric{display:flex;align-items:center;gap:8px;}
+  .proj-metric-val{font-size:0.85rem;}
+
+  .medallion-layer{padding:16px 14px;}
+  .layer-desc{font-size:0.72rem;}
+
+  .contact-link{font-size:0.8rem;gap:10px;}
+
+  .prev-card{padding:16px 14px;}
+
+  footer{padding:24px 16px;}
+  .footer-text{font-size:0.52rem;letter-spacing:1px;line-height:1.8;}
+}
+
+/* ---- BREAKPOINT: TINY MOBILE 360px (iPhone SE, small Android) ---- */
+@media(max-width:380px){
+  nav{padding:10px 14px;}
+  .nav-logo{font-size:0.7rem;}
+  .hamburger{width:40px;height:40px;}
+
+  .hero{padding:80px 14px 130px;}
+  .hero-eyebrow{display:none;}
+  .hero-name{font-size:clamp(2rem,9vw,2.8rem);}
+  .hero-title{font-size:0.62rem;letter-spacing:1.5px;}
+  .hero-headline{font-size:0.95rem;padding:0;}
+  .hero-sub{font-size:0.72rem;}
+  .status-badge{font-size:0.55rem;padding:5px 10px;}
+
+  section{padding:50px 14px;}
+  .section-title{font-size:1.25rem;}
+
+  .tech-category{padding:14px 12px;}
+  .tech-cat-label{font-size:0.52rem;}
+  .tech-item{font-size:0.76rem;gap:8px;}
+
+  .project-card{padding:16px 12px;}
+  .project-title{font-size:0.92rem;}
+  .stack-tag{font-size:0.55rem;padding:3px 7px;}
+
+  .repo-card{padding:16px 14px;}
+  .repo-name{font-size:0.72rem;}
+  .repo-desc{font-size:0.76rem;}
+
+  .contact-text .big{font-size:1.3rem;}
+  .contact-link{padding:12px 14px;font-size:0.78rem;}
+}
+
+/* ---- PREVENT HORIZONTAL OVERFLOW GLOBALLY ---- */
+*{max-width:100%;}
+img,canvas,svg{max-width:100%;height:auto;}
+.pipe-flow{overflow-x:hidden;}
+.hero-sub{word-break:break-word;overflow-wrap:break-word;}
+.hero-title{word-break:break-word;overflow-wrap:break-word;}
+.footer-text{word-break:break-word;}
+.project-stack{overflow:hidden;}
+
+/* ---- TOUCH INTERACTIONS ---- */
+@media(hover:none) and (pointer:coarse){
+  .tech-category:hover,
+  .project-card:hover,
+  .pipe-node:hover,
+  .medallion-layer:hover,
+  .repo-card:hover,
+  .prev-card:hover,
+  .contact-link:hover,
+  .eng-card:hover,
+  .info-card:hover{
+    transform:none;
+  }
+  .btn-primary:active{transform:scale(0.97);}
+  .btn-secondary:active{transform:scale(0.97);}
+  .contact-link:active{background:rgba(0,212,255,0.08);}
+  .stack-tag:hover{background:rgba(0,212,255,0.07);}
+}
+
+/* ---- REDUCED MOTION ---- */
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none;}
+  .reveal.visible{opacity:1;transform:none;}
+  @keyframes pulse-arrow{0%,100%{opacity:0.6;}}
+  @keyframes pulse-dot{0%,100%{box-shadow:none;}}
+  .skill-bar-fill{transition:width 0.4s ease;}
+}
+
+/* ---- SAFE AREA (iPhone notch/Dynamic Island) ---- */
+@supports(padding:max(0px)){
+  nav{
+    padding-left:max(20px,env(safe-area-inset-left));
+    padding-right:max(20px,env(safe-area-inset-right));
+  }
+  .mobile-drawer{
+    padding-right:max(32px,env(safe-area-inset-right));
+  }
+  footer{
+    padding-bottom:max(24px,env(safe-area-inset-bottom));
+  }
 }
 </style>
 </head>
 <body>
+<div class="bg-glow"></div>
 
-<canvas id="bg-canvas"></canvas>
-<div class="cursor-glow" id="cursorGlow"></div>
-<div class="particles-container" id="particles"></div>
+<!-- MOBILE DRAWER OVERLAY -->
+<div class="mobile-drawer-overlay" id="drawerOverlay" role="presentation"></div>
 
-<div class="page">
-
-  <!-- HERO -->
-  <div class="hero" id="hero">
-    <div class="name-3d">Muhammad Javed</div>
-    <div class="title-3d">Aspiring Cloud Data Engineer</div>
-    <p class="tagline">
-      Turning raw data into actionable insights. Experienced with Python, SQL, Pandas, NumPy, AWS, Snowflake, and MERN Stack. Building ETL &amp; ELT pipelines and scalable cloud solutions.
-    </p>
-    <div class="social">
-      <a href="https://www.facebook.com/" target="_blank" title="Facebook">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-      </a>
-      <a href="https://www.instagram.com/" target="_blank" title="Instagram">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/in/Muhammad-javed-500b07318" target="_blank" title="LinkedIn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-      </a>
-      <a href="https://github.com/" target="_blank" title="GitHub">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
-      </a>
-    </div>
-  </div>
-
-  <!-- TECH SCROLL -->
-  <p class="section-label">⚡ Tech Stack — Hover to Pause</p>
-  <div class="tech-row-section">
-    <div class="tech-scroll-track" id="scrollTrack"></div>
-  </div>
-
-  <!-- PIPELINE -->
-  <p class="section-label">⚙️ Data Pipeline Architecture</p>
-  <div class="pipeline-card">
-    <div class="two-pipes">
-      <div class="pipe-col">
-        <div class="pipeline-title">ETL Pipeline</div>
-        <div class="pipeline-flow">
-          <div class="pipe-step"><div class="pipe-step-label">Extract</div><div class="pipe-step-text">SQL Server / APIs</div></div>
-          <div class="pipe-arrow">→</div>
-          <div class="pipe-step"><div class="pipe-step-label">Transform</div><div class="pipe-step-text">Python / Pandas</div></div>
-          <div class="pipe-arrow">→</div>
-          <div class="pipe-step"><div class="pipe-step-label">Load</div><div class="pipe-step-text">Snowflake / S3</div></div>
-        </div>
-      </div>
-      <div class="pipe-divider"></div>
-      <div class="pipe-col">
-        <div class="pipeline-title" style="color:var(--gold);">ELT Pipeline</div>
-        <div class="pipeline-flow">
-          <div class="pipe-step gold-step"><div class="pipe-step-label">Extract</div><div class="pipe-step-text">Raw Sources</div></div>
-          <div class="pipe-arrow pipe-arrow-gold">→</div>
-          <div class="pipe-step gold-step"><div class="pipe-step-label">Load</div><div class="pipe-step-text">Data Warehouse</div></div>
-          <div class="pipe-arrow pipe-arrow-gold">→</div>
-          <div class="pipe-step gold-step"><div class="pipe-step-label">Transform</div><div class="pipe-step-text">dbt / Snowflake</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INFO CARDS -->
-  <p class="section-label">🌐 Core Expertise</p>
-  <div class="cards-row">
-    <div class="info-card">
-      <div class="card-icon">☁️</div>
-      <div class="card-title">Cloud Platforms</div>
-      <div class="card-text"><strong>AWS</strong> — S3, Glue, Lambda, Redshift, EC2<br><strong>Snowflake</strong> — Data Warehousing, Time Travel, Data Sharing</div>
-    </div>
-    <div class="info-card">
-      <div class="card-icon">🗄️</div>
-      <div class="card-title">Databases</div>
-      <div class="card-text"><strong>SQL Server</strong> — Queries, Stored Procedures, SSMS<br><strong>MongoDB</strong> — NoSQL, Aggregation<br><strong>MySQL</strong> — Relational DBs</div>
-    </div>
-    <div class="info-card">
-      <div class="card-icon">🐍</div>
-      <div class="card-title">Data Engineering</div>
-      <div class="card-text"><strong>Python</strong>, Pandas, NumPy<br>ETL / ELT Pipeline Design<br>Apache Airflow, Data Modeling</div>
-    </div>
-    <div class="info-card">
-      <div class="card-icon">⚡</div>
-      <div class="card-title">MERN Stack</div>
-      <div class="card-text"><strong>MongoDB, Express, React, Node.js</strong><br>Full-stack apps for data-driven solutions</div>
-    </div>
-  </div>
-
-  <!-- FAMOUS ENGINEERS -->
-  <div class="engineers-section">
-    <p class="section-label">🏆 Inspiring Data Engineers</p>
-    <div class="eng-cards">
-      <div class="eng-card">
-        <div class="eng-name">⭐ Maxime Beauchemin</div>
-        <div class="eng-desc">Creator of <strong>Apache Airflow</strong> — the world's most popular workflow orchestration platform used by data engineers globally.</div>
-      </div>
-      <div class="eng-card">
-        <div class="eng-name">⭐ Jeff Hammerbacher</div>
-        <div class="eng-desc">Early <strong>Facebook Data Engineer</strong> who pioneered modern data infrastructure and co-founded Cloudera.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer">Muhammad Javed &nbsp;·&nbsp; Cloud Data Engineer &nbsp;·&nbsp; 2025</div>
-
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <div class="mobile-drawer-logo">MJ / Data Engineer</div>
+  <ul class="mobile-nav-links">
+    <li><a href="#stack" class="drawer-link">Stack</a></li>
+    <li><a href="#projects" class="drawer-link">Projects</a></li>
+    <li><a href="#architecture" class="drawer-link">Architecture</a></li>
+    <li><a href="#github" class="drawer-link">GitHub</a></li>
+    <li><a href="#previous" class="drawer-link">Experience</a></li>
+    <li><a href="#contact" class="drawer-link">Contact</a></li>
+  </ul>
+  <a href="https://www.linkedin.com/in/Muhammad-javed-500b07318" target="_blank" class="nav-cta">Connect on LinkedIn →</a>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<!-- NAV -->
+<nav id="main-nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-logo">MJ / Data Engineer</div>
+  <ul class="nav-links">
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#github">GitHub</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://www.linkedin.com/in/Muhammad-javed-500b07318" target="_blank" class="nav-cta">Connect →</a>
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileDrawer">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="position:relative;">
+  <canvas id="pipeline-canvas"></canvas>
+  <div class="hero-eyebrow">Cloud Data Engineer</div>
+  <div class="status-badge">
+    <span class="status-dot"></span>
+    Open to Data Engineering Roles
+  </div>
+  <h1 class="hero-name">Muhammad <span>Javed</span></h1>
+  <div class="hero-title">Cloud Data Engineer · Analytics Engineer · Data Architect</div>
+  <h2 class="hero-headline">Building Scalable Data Platforms, Modern Data Warehouses, and Cloud-Native Data Pipelines</h2>
+  <p class="hero-sub">
+    <span class="tag">Python</span> · <span class="tag">SQL</span> · <span class="tag">Snowflake</span> · <span class="tag">dbt</span> · <span class="tag">Apache Airflow</span> · <span class="tag">Apache Kafka</span> · <span class="tag">Pandas</span> · <span class="tag">AWS S3</span> · <span class="tag">AWS Glue</span> · <span class="tag">Data Modeling</span> · <span class="tag">ETL/ELT</span> · <span class="tag">Analytics Engineering</span>
+  </p>
+  <div class="hero-metrics">
+    <div class="metric">
+      <div class="metric-value" data-count="6">0</div>
+      <div class="metric-label">Data Engineering Projects</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value" data-count="10">0</div>
+      <div class="metric-label">Core Technologies</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value" data-count="3">0</div>
+      <div class="metric-label">Cloud Platforms</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value" data-count="100">0</div>
+      <div class="metric-label">% Focused on Data Eng.</div>
+    </div>
+  </div>
+  <div class="hero-actions">
+    <a href="#projects" class="btn-primary">View Data Projects</a>
+    <a href="https://github.com/mjavedjs" target="_blank" class="btn-secondary">GitHub Repos</a>
+    <a href="#contact" class="btn-secondary">Hire Me</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TECH STACK -->
+<section class="tech-section" id="stack">
+  <div class="section-inner">
+    <div class="section-label">Core Competencies</div>
+    <h2 class="section-title reveal">Technology Stack</h2>
+    <p class="section-desc reveal reveal-delay-1">Enterprise-grade data engineering tools used to build modern data platforms at scale.</p>
+    <div class="tech-grid">
+      <div class="tech-category reveal reveal-delay-1">
+        <div class="tech-cat-label">Core Languages</div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot"></span>Python 3.x</div>
+          <div class="tech-item"><span class="tech-dot"></span>SQL (Advanced)</div>
+          <div class="tech-item"><span class="tech-dot"></span>Bash / Shell</div>
+        </div>
+      </div>
+      <div class="tech-category reveal reveal-delay-2">
+        <div class="tech-cat-label">Data Engineering</div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot orange"></span>Apache Airflow</div>
+          <div class="tech-item"><span class="tech-dot orange"></span>Apache Kafka</div>
+          <div class="tech-item"><span class="tech-dot orange"></span>dbt (data build tool)</div>
+          <div class="tech-item"><span class="tech-dot orange"></span>Pandas / NumPy</div>
+        </div>
+      </div>
+      <div class="tech-category reveal reveal-delay-3">
+        <div class="tech-cat-label">Cloud Platforms</div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot snow"></span>Snowflake</div>
+          <div class="tech-item"><span class="tech-dot snow"></span>AWS S3</div>
+          <div class="tech-item"><span class="tech-dot snow"></span>AWS Glue</div>
+          <div class="tech-item"><span class="tech-dot snow"></span>AWS IAM</div>
+        </div>
+      </div>
+      <div class="tech-category reveal reveal-delay-4">
+        <div class="tech-cat-label">Concepts & Patterns</div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot green"></span>ETL / ELT Pipelines</div>
+          <div class="tech-item"><span class="tech-dot green"></span>Data Warehousing</div>
+          <div class="tech-item"><span class="tech-dot green"></span>Star Schema</div>
+          <div class="tech-item"><span class="tech-dot green"></span>Medallion Architecture</div>
+          <div class="tech-item"><span class="tech-dot green"></span>Analytics Engineering</div>
+          <div class="tech-item"><span class="tech-dot green"></span>Data Quality</div>
+          <div class="tech-item"><span class="tech-dot green"></span>Workflow Orchestration</div>
+        </div>
+      </div>
+      <div class="tech-category reveal reveal-delay-1">
+        <div class="tech-cat-label">Databases</div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot"></span>SQL Server / SSMS</div>
+          <div class="tech-item"><span class="tech-dot"></span>MongoDB</div>
+          <div class="tech-item"><span class="tech-dot"></span>MySQL</div>
+          <div class="tech-item"><span class="tech-dot"></span>Snowflake DW</div>
+        </div>
+      </div>
+      <div class="tech-category reveal reveal-delay-2">
+        <div class="tech-cat-label">Tools & DevOps</div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot"></span>Git / GitHub</div>
+          <div class="tech-item"><span class="tech-dot"></span>Docker (basics)</div>
+          <div class="tech-item"><span class="tech-dot"></span>VS Code</div>
+          <div class="tech-item"><span class="tech-dot"></span>Jupyter Notebooks</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PIPELINE ARCHITECTURE -->
+<section class="pipeline-section" id="architecture">
+  <div class="section-inner">
+    <div class="section-label">System Design</div>
+    <h2 class="section-title reveal">Data Pipeline Architectures</h2>
+    <p class="section-desc reveal reveal-delay-1">Designing and implementing battle-tested ETL, ELT, and real-time streaming pipelines for enterprise-grade data platforms.</p>
+
+    <div class="pipe-flows-grid">
+      <!-- ETL -->
+      <div class="arch-card reveal">
+        <div class="arch-title etl">⚙️ ETL Pipeline — Batch Processing</div>
+        <div class="pipe-flow">
+          <div class="pipe-node">
+            <div class="pipe-badge">Source</div>
+            <div class="pipe-label">SQL Server / APIs</div>
+            <div class="pipe-sub">Raw transactional data</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node">
+            <div class="pipe-badge">Transform</div>
+            <div class="pipe-label">Python · Pandas</div>
+            <div class="pipe-sub">Cleanse, normalize, enrich</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node">
+            <div class="pipe-badge">Orchestrate</div>
+            <div class="pipe-label">Apache Airflow</div>
+            <div class="pipe-sub">DAG scheduling & monitoring</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node">
+            <div class="pipe-badge">Load</div>
+            <div class="pipe-label">AWS S3 · Snowflake</div>
+            <div class="pipe-sub">Data warehouse ingestion</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ELT -->
+      <div class="arch-card reveal reveal-delay-1">
+        <div class="arch-title elt">🔶 ELT Pipeline — dbt + Snowflake</div>
+        <div class="pipe-flow">
+          <div class="pipe-node orange">
+            <div class="pipe-badge orange">Extract</div>
+            <div class="pipe-label">Raw Sources</div>
+            <div class="pipe-sub">APIs, databases, files</div>
+          </div>
+          <div class="pipe-arrow orange">→</div>
+          <div class="pipe-node orange">
+            <div class="pipe-badge orange">Stage</div>
+            <div class="pipe-label">AWS S3 / Glue</div>
+            <div class="pipe-sub">Landing zone staging</div>
+          </div>
+          <div class="pipe-arrow orange">→</div>
+          <div class="pipe-node orange">
+            <div class="pipe-badge orange">Load</div>
+            <div class="pipe-label">Snowflake DWH</div>
+            <div class="pipe-sub">Raw layer ingestion</div>
+          </div>
+          <div class="pipe-arrow orange">→</div>
+          <div class="pipe-node orange">
+            <div class="pipe-badge orange">Transform</div>
+            <div class="pipe-label">dbt Models</div>
+            <div class="pipe-sub">SQL-based transformations</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Streaming -->
+      <div class="arch-card reveal reveal-delay-2">
+        <div class="arch-title stream">⚡ Real-Time Streaming — Kafka Pipeline</div>
+        <div class="pipe-flow">
+          <div class="pipe-node green">
+            <div class="pipe-badge green">Produce</div>
+            <div class="pipe-label">Event Producers</div>
+            <div class="pipe-sub">Applications, IoT, APIs</div>
+          </div>
+          <div class="pipe-arrow green">→</div>
+          <div class="pipe-node green">
+            <div class="pipe-badge green">Stream</div>
+            <div class="pipe-label">Apache Kafka</div>
+            <div class="pipe-sub">Topic partitioning & offset</div>
+          </div>
+          <div class="pipe-arrow green">→</div>
+          <div class="pipe-node green">
+            <div class="pipe-badge green">Consume</div>
+            <div class="pipe-label">Python Consumer</div>
+            <div class="pipe-sub">Kafka-Python consumers</div>
+          </div>
+          <div class="pipe-arrow green">→</div>
+          <div class="pipe-node green">
+            <div class="pipe-badge green">Sink</div>
+            <div class="pipe-label">Snowflake · S3</div>
+            <div class="pipe-sub">Near real-time analytics</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MEDALLION ARCHITECTURE -->
+<section class="medallion-section">
+  <div class="section-inner">
+    <div class="section-label">Data Architecture</div>
+    <h2 class="section-title reveal" style="text-align:center;">Medallion Architecture</h2>
+    <p class="section-desc reveal reveal-delay-1" style="margin:0 auto 40px;text-align:center;">The lakehouse pattern powering modern data platforms — Bronze → Silver → Gold.</p>
+    <div class="medallion-flow">
+      <div class="medallion-layer bronze reveal reveal-delay-1">
+        <div class="layer-badge">🥉</div>
+        <div class="layer-name bronze">Bronze Layer</div>
+        <div class="layer-title">Raw / Landing</div>
+        <div class="layer-desc">Raw ingested data as-is from source systems. No transformation. Full audit trail. S3 / Snowflake raw schema.</div>
+      </div>
+      <div class="medallion-layer silver reveal reveal-delay-2">
+        <div class="layer-badge">🥈</div>
+        <div class="layer-name silver">Silver Layer</div>
+        <div class="layer-title">Cleaned / Conformed</div>
+        <div class="layer-desc">Deduped, validated, and standardized data. dbt models apply business rules. Data Quality checks run here.</div>
+      </div>
+      <div class="medallion-layer gold reveal reveal-delay-3">
+        <div class="layer-badge">🥇</div>
+        <div class="layer-name gold">Gold Layer</div>
+        <div class="layer-title">Business / Serving</div>
+        <div class="layer-desc">Aggregated, analytics-ready marts. Star Schema, fact & dimension tables powering dashboards and reports.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="section-inner">
+    <div class="section-label">Enterprise Case Studies</div>
+    <h2 class="section-title reveal">Featured Data Engineering Projects</h2>
+    <p class="section-desc reveal reveal-delay-1">End-to-end data platform builds demonstrating real-world pipeline design, cloud architecture, and analytics engineering.</p>
+    <div class="projects-grid">
+
+      <div class="project-card featured reveal">
+        <div class="project-num">PROJECT 01 · FEATURED</div>
+        <div class="project-title">Airbnb Data Platform — End-to-End Analytics</div>
+        <div class="project-desc">Built a production-grade analytics platform modeled on Airbnb's data infrastructure. Ingested raw listings, bookings, and reviews data from multiple sources into AWS S3 as landing zone. Snowflake served as the cloud data warehouse with staging, integration, and presentation layers. dbt handled all transformations — implementing SCD Type 2 for historical tracking, fact tables for bookings/revenue, and dimension tables for hosts, listings, and locations. Medallion architecture (Bronze → Silver → Gold) enforced data quality and enabled self-service analytics.</div>
+        <div class="project-stack">
+          <span class="stack-tag snow">Snowflake</span>
+          <span class="stack-tag orange">dbt</span>
+          <span class="stack-tag">AWS S3</span>
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">SQL</span>
+          <span class="stack-tag green">Star Schema</span>
+          <span class="stack-tag green">Medallion Architecture</span>
+          <span class="stack-tag">Data Modeling</span>
+        </div>
+        <div class="project-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">3</div><div class="proj-metric-lbl">Data Layers</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">10+</div><div class="proj-metric-lbl">dbt Models</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">SCD2</div><div class="proj-metric-lbl">History Tracking</div></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-num">PROJECT 02</div>
+        <div class="project-title">Real-Time Streaming Pipeline — Kafka + Snowflake</div>
+        <div class="project-desc">Architected a low-latency streaming pipeline using Apache Kafka as the distributed event broker. Python producers simulate real-time events (transactions, user activity). Kafka-Python consumers process, deserialize, and validate stream records before sinking to Snowflake for near-real-time analytics. Implemented topic partitioning, consumer group offset management, and schema-based message validation.</div>
+        <div class="project-stack">
+          <span class="stack-tag green">Apache Kafka</span>
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag snow">Snowflake</span>
+          <span class="stack-tag">kafka-python</span>
+          <span class="stack-tag">Stream Processing</span>
+        </div>
+        <div class="project-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">Real-Time</div><div class="proj-metric-lbl">Stream Latency</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">Kafka</div><div class="proj-metric-lbl">Event Broker</div></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-2">
+        <div class="project-num">PROJECT 03</div>
+        <div class="project-title">Airflow Workflow Orchestration System</div>
+        <div class="project-desc">Designed and deployed a multi-DAG orchestration system using Apache Airflow. Built reusable DAG templates for ETL pipeline scheduling, dependency management, and failure alerting. Implemented Python operators, sensors, and branching logic for complex conditional workflows. Integrated with Snowflake and S3 via Airflow connections and hooks.</div>
+        <div class="project-stack">
+          <span class="stack-tag orange">Apache Airflow</span>
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">DAG Design</span>
+          <span class="stack-tag snow">Snowflake Hooks</span>
+          <span class="stack-tag">AWS S3</span>
+        </div>
+        <div class="project-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">DAGs</div><div class="proj-metric-lbl">Orchestration</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">Automated</div><div class="proj-metric-lbl">Scheduling</div></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-num">PROJECT 04</div>
+        <div class="project-title">Enterprise Data Warehouse — Snowflake + dbt</div>
+        <div class="project-desc">Designed and implemented a complete enterprise data warehouse from scratch using Snowflake. Modeled star schema with fact and dimension tables following Kimball methodology. Applied dbt for modular SQL transformations with source freshness checks, schema tests, and documentation generation. Configured virtual warehouses for workload isolation and cost optimization.</div>
+        <div class="project-stack">
+          <span class="stack-tag snow">Snowflake</span>
+          <span class="stack-tag">SQL</span>
+          <span class="stack-tag orange">dbt</span>
+          <span class="stack-tag green">Kimball</span>
+          <span class="stack-tag green">Star Schema</span>
+          <span class="stack-tag">Data Warehouse</span>
+        </div>
+        <div class="project-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">Kimball</div><div class="proj-metric-lbl">Methodology</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">dbt</div><div class="proj-metric-lbl">Transformations</div></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-2">
+        <div class="project-num">PROJECT 05</div>
+        <div class="project-title">ETL Automation Framework — Python + AWS</div>
+        <div class="project-desc">Built a reusable, configuration-driven ETL framework in Python that standardizes pipeline development. Framework abstracts data extraction (REST APIs, SQL databases), applies Pandas-based transformation chains, and loads to AWS S3 or Snowflake. Supports incremental loads, upsert patterns, and data quality assertions. Deployed via AWS Glue for serverless execution.</div>
+        <div class="project-stack">
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">Pandas</span>
+          <span class="stack-tag">AWS Glue</span>
+          <span class="stack-tag">AWS S3</span>
+          <span class="stack-tag snow">Snowflake</span>
+          <span class="stack-tag">ETL Framework</span>
+        </div>
+        <div class="project-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">Serverless</div><div class="proj-metric-lbl">AWS Glue</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">Config-Driven</div><div class="proj-metric-lbl">Framework</div></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-3">
+        <div class="project-num">PROJECT 06</div>
+        <div class="project-title">Analytics Engineering Project — dbt + Snowflake</div>
+        <div class="project-desc">Applied Analytics Engineering best practices using dbt as the transformation layer on top of Snowflake. Built staging, intermediate, and mart models following dbt project conventions. Implemented dbt tests (unique, not-null, accepted values, relationships), sources with freshness checks, and auto-generated data documentation. Enabled self-service analytics for BI tools.</div>
+        <div class="project-stack">
+          <span class="stack-tag orange">dbt Core</span>
+          <span class="stack-tag snow">Snowflake</span>
+          <span class="stack-tag green">Analytics Eng.</span>
+          <span class="stack-tag">Data Quality</span>
+          <span class="stack-tag">SQL</span>
+          <span class="stack-tag">Data Docs</span>
+        </div>
+        <div class="project-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">dbt</div><div class="proj-metric-lbl">Transform Layer</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">Tested</div><div class="proj-metric-lbl">Data Quality</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GITHUB -->
+<section class="github-section" id="github">
+  <div class="section-inner">
+    <div class="section-label">Open Source</div>
+    <h2 class="section-title reveal">GitHub Repositories</h2>
+    <p class="section-desc reveal reveal-delay-1">Data engineering projects, pipeline implementations, and cloud architecture code.</p>
+    <a href="https://github.com/mjavedjs" target="_blank" class="github-profile-link reveal reveal-delay-1">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+      github.com/mjavedjs — View Full Profile →
+    </a>
+    <div class="repos-grid" id="repos-grid">
+      <div class="github-loading" style="grid-column:1/-1;">
+        <div style="font-size:0.7rem;opacity:0.5;margin-bottom:8px;">Loading repositories from GitHub...</div>
+        <div id="github-error" style="display:none;color:var(--text);">
+          <br>
+          <!-- Fallback repo cards shown if API fails -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PREVIOUS EXPERIENCE (small) -->
+<section class="prev-section" id="previous">
+  <div class="section-inner">
+    <div class="section-label">Background</div>
+    <h2 class="section-title reveal" style="font-size:1.4rem;">Previous Web Development Experience</h2>
+    <p class="section-desc reveal reveal-delay-1" style="font-size:0.82rem;opacity:0.7;">Full-stack development background that supports building data-driven applications and internal tooling.</p>
+    <div class="prev-grid">
+      <div class="prev-card reveal reveal-delay-1">
+        <div class="prev-badge">MERN Stack</div>
+        <div class="prev-title">Full-Stack Web Applications</div>
+        <div class="prev-desc">MongoDB, Express, React, Node.js — data-driven web applications with REST APIs and NoSQL databases.</div>
+      </div>
+      <div class="prev-card reveal reveal-delay-2">
+        <div class="prev-badge">REST APIs</div>
+        <div class="prev-title">API Development & Integration</div>
+        <div class="prev-desc">Building and consuming REST APIs — foundational skill for data extraction in pipeline development.</div>
+      </div>
+      <div class="prev-card reveal reveal-delay-3">
+        <div class="prev-badge">NoSQL</div>
+        <div class="prev-title">MongoDB & Document Stores</div>
+        <div class="prev-desc">NoSQL data modeling and aggregation pipelines — complementary to data engineering workflows.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="contact-text">
+        <div class="section-label">Available for Roles</div>
+        <div class="big">Let's Build <span>Data Platforms</span> Together</div>
+        <p style="font-size:0.9rem;color:var(--text);line-height:1.75;margin-bottom:20px;">
+          Looking for Cloud Data Engineer, Data Engineer, or Analytics Engineer roles. Open to full-time positions and contract work involving Snowflake, dbt, Airflow, Kafka, AWS, and modern data stack.
+        </p>
+        <div class="contact-links">
+          <a href="https://www.linkedin.com/in/Muhammad-javed-500b07318" target="_blank" class="contact-link">
+            <span class="contact-link-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </span>
+            LinkedIn — Muhammad Javed
+          </a>
+          <a href="https://github.com/mjavedjs" target="_blank" class="contact-link">
+            <span class="contact-link-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            </span>
+            GitHub — mjavedjs
+          </a>
+          <a href="https://www.facebook.com/" target="_blank" class="contact-link">
+            <span class="contact-link-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </span>
+            Facebook
+          </a>
+          <a href="https://www.instagram.com/" target="_blank" class="contact-link">
+            <span class="contact-link-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+            </span>
+            Instagram
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom:20px;">Proficiency Levels</div>
+        <div class="skill-bars">
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span>Python & SQL</span><span style="color:var(--cyan);">85%</span></div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="85"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span>Snowflake</span><span style="color:var(--cyan);">80%</span></div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="80"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span>dbt</span><span style="color:var(--dbt);">75%</span></div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill orange" data-width="75"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span>Apache Airflow</span><span style="color:var(--dbt);">75%</span></div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill orange" data-width="75"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span>Apache Kafka</span><span style="color:var(--cyan);">70%</span></div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="70"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span>AWS (S3, Glue, IAM)</span><span style="color:var(--cyan);">72%</span></div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="72"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span>Data Modeling</span><span style="color:var(--dbt);">78%</span></div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill orange" data-width="78"></div></div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-top"><span>ETL / ELT Pipelines</span><span style="color:var(--cyan);">82%</span></div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="82"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Muhammad Javed</div>
+    <div class="footer-text">Cloud Data Engineer · Snowflake · dbt · Apache Airflow · Apache Kafka · AWS · Python · SQL · 2025</div>
+  </div>
+</footer>
+
 <script>
-// CURSOR GLOW
-const cg = document.getElementById('cursorGlow');
-document.addEventListener('mousemove', e => {
-  cg.style.left = e.clientX + 'px';
-  cg.style.top = e.clientY + 'px';
-});
+// ---- PIPELINE CANVAS ANIMATION ----
+(function(){
+  const canvas = document.getElementById('pipeline-canvas');
+  const ctx = canvas.getContext('2d');
+  function resize(){
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
 
-// PARTICLES
-const pc = document.getElementById('particles');
-for(let i = 0; i < 18; i++){
-  const p = document.createElement('div');
-  p.className = 'particle';
-  const size = Math.random()*3+1;
-  const hue = Math.random()>0.5?'195':'50';
-  p.style.cssText = `width:${size}px;height:${size}px;background:hsl(${hue},100%,70%);left:${Math.random()*100}%;animation-duration:${Math.random()*10+8}s;animation-delay:${Math.random()*10}s;box-shadow:0 0 ${size*3}px hsl(${hue},100%,70%);`;
-  pc.appendChild(p);
-}
+  const tools = [
+    {name:'Kafka',color:'#00E5A0'},
+    {name:'Airflow',color:'#FF694A'},
+    {name:'S3',color:'#00D4FF'},
+    {name:'Glue',color:'#29B5E8'},
+    {name:'Snowflake',color:'#29B5E8'},
+    {name:'dbt',color:'#FF694A'},
+  ];
 
-// THREE.JS BACKGROUND
-const canvas = document.getElementById('bg-canvas');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  const nodes = tools.map((t, i) => ({
+    x: (i / (tools.length - 1)) * 0.8 + 0.1,
+    y: 0.3 + Math.sin(i * 1.2) * 0.25,
+    label: t.name,
+    color: t.color,
+    pulse: Math.random() * Math.PI * 2,
+  }));
 
-const starGeo = new THREE.BufferGeometry();
-const pos = new Float32Array(600*3);
-for(let i = 0; i < 600*3; i++) pos[i] = (Math.random()-0.5)*200;
-starGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0x88ccff,size:0.3,transparent:true,opacity:0.5})));
+  const packets = [];
+  let frame = 0;
 
-const sphere = new THREE.Mesh(
-  new THREE.IcosahedronGeometry(2.5,1),
-  new THREE.MeshBasicMaterial({color:0x00e5ff,wireframe:true,transparent:true,opacity:0.05})
-);
-sphere.position.set(0,0,-5);
-scene.add(sphere);
-camera.position.z = 5;
+  function spawnPacket() {
+    const from = Math.floor(Math.random() * (nodes.length - 1));
+    packets.push({ from, to: from + 1, t: 0, speed: 0.008 + Math.random() * 0.006, color: nodes[from].color });
+  }
 
-let mx=0,my=0;
-document.addEventListener('mousemove',e=>{mx=(e.clientX/window.innerWidth-0.5)*0.5;my=(e.clientY/window.innerHeight-0.5)*0.5;});
+  setInterval(spawnPacket, 600);
 
-(function animate(){
-  requestAnimationFrame(animate);
-  sphere.rotation.y+=0.003;sphere.rotation.x+=0.001;
-  camera.position.x+=(mx-camera.position.x)*0.02;
-  camera.position.y+=(-my-camera.position.y)*0.02;
-  camera.lookAt(scene.position);
-  renderer.render(scene,camera);
+  function draw(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const W = canvas.width, H = canvas.height;
+
+    // Draw lines
+    for(let i = 0; i < nodes.length - 1; i++){
+      const a = nodes[i], b = nodes[i+1];
+      ctx.beginPath();
+      ctx.moveTo(a.x * W, a.y * H);
+      ctx.lineTo(b.x * W, b.y * H);
+      ctx.strokeStyle = 'rgba(0,212,255,0.12)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    // Draw packets
+    for(let p of packets){
+      const a = nodes[p.from], b = nodes[p.to];
+      const x = (a.x + (b.x - a.x) * p.t) * W;
+      const y = (a.y + (b.y - a.y) * p.t) * H;
+      ctx.beginPath();
+      ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    // Draw nodes
+    frame++;
+    for(let n of nodes){
+      n.pulse += 0.04;
+      const px = n.x * W, py = n.y * H;
+      const glow = Math.sin(n.pulse) * 0.3 + 0.7;
+      ctx.beginPath();
+      ctx.arc(px, py, 6, 0, Math.PI * 2);
+      ctx.fillStyle = n.color;
+      ctx.shadowColor = n.color;
+      ctx.shadowBlur = 14 * glow;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.font = '500 10px JetBrains Mono, monospace';
+      ctx.fillStyle = 'rgba(200,223,240,0.7)';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.label, px, py - 14);
+    }
+
+    // Advance & remove packets
+    for(let i = packets.length - 1; i >= 0; i--){
+      packets[i].t += packets[i].speed;
+      if(packets[i].t >= 1) packets.splice(i, 1);
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
 })();
 
-window.addEventListener('resize',()=>{
-  camera.aspect=window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth,window.innerHeight);
-});
+// ---- METRIC COUNTERS ----
+function animateCounters(){
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    let start = 0;
+    const step = target / 40;
+    const timer = setInterval(() => {
+      start = Math.min(start + step, target);
+      el.textContent = Math.round(start) + (target === 100 ? '%' : '+');
+      if(start >= target){
+        el.textContent = target + (target === 100 ? '%' : '+');
+        clearInterval(timer);
+      }
+    }, 40);
+  });
+}
 
-// TECH SCROLL ICONS
-const techList = [
-  {name:'Python',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'},
-  {name:'SQL',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg'},
-  {name:'Pandas',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg'},
-  {name:'NumPy',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg'},
-  {name:'AWS',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg'},
-  {name:'Snowflake',img:'https://www.vectorlogo.zone/logos/snowflake/snowflake-icon.svg'},
-  {name:'SQL Server',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg'},
-  {name:'React',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg'},
-  {name:'Node.js',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg'},
-  {name:'MongoDB',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg'},
-  {name:'Express',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg'},
-  {name:'Git',img:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg'},
-];
-const track = document.getElementById('scrollTrack');
-[...techList,...techList].forEach(tech=>{
-  const el = document.createElement('div');
-  el.className = 'scroll-icon';
-  el.innerHTML = `<img src="${tech.img}" alt="${tech.name}" onerror="this.style.display='none'"><span>${tech.name}</span>`;
-  track.appendChild(el);
-});
+// ---- SCROLL REVEAL ----
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+    }
+  });
+}, {threshold: 0.1});
 
-// GSAP ANIMATIONS
-gsap.from('.name-3d',{opacity:0,y:-60,rotationX:30,duration:1.2,ease:'power4.out'});
-gsap.from('.title-3d',{opacity:0,y:-30,duration:1,delay:0.4,ease:'power3.out'});
-gsap.from('.tagline',{opacity:0,y:-20,duration:1,delay:0.7,ease:'power3.out'});
-gsap.from('.social',{opacity:0,y:20,duration:1,delay:1,ease:'power3.out'});
-gsap.from('.tech-row-section',{opacity:0,y:30,duration:1,delay:1.2,ease:'power3.out'});
-gsap.from('.pipeline-card',{opacity:0,y:30,duration:1,delay:1.4,ease:'power3.out'});
-gsap.from('.info-card',{opacity:0,y:30,duration:0.8,stagger:0.15,delay:1.6,ease:'power3.out'});
-gsap.from('.eng-card',{opacity:0,x:-30,duration:0.8,stagger:0.2,delay:2,ease:'power3.out'});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// 3D TILT HERO
-const hero = document.getElementById('hero');
-document.addEventListener('mousemove',e=>{
-  const rx=(e.clientY/window.innerHeight-0.5)*10;
-  const ry=(e.clientX/window.innerWidth-0.5)*-10;
-  hero.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-});
+// ---- SKILL BARS ----
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+      });
+    }
+  });
+}, {threshold: 0.3});
+
+document.querySelector('.contact-section') && barObserver.observe(document.querySelector('.contact-section'));
+
+// ---- COUNTER TRIGGER ----
+const heroObserver = new IntersectionObserver((entries) => {
+  if(entries[0].isIntersecting) animateCounters();
+}, {threshold: 0.5});
+document.querySelector('.hero-metrics') && heroObserver.observe(document.querySelector('.hero-metrics'));
+
+// ---- GITHUB API ----
+async function loadGitHub(){
+  const grid = document.getElementById('repos-grid');
+  try {
+    const res = await fetch('https://api.github.com/users/mjavedjs/repos?sort=updated&per_page=12');
+    const repos = await res.json();
+
+    if(!repos || repos.message){
+      showFallbackRepos(grid);
+      return;
+    }
+
+    // Prioritize data engineering repos
+    const deKeywords = ['data','pipeline','etl','elt','airflow','kafka','snowflake','dbt','aws','sql','python','analytics'];
+    const sorted = repos.sort((a,b)=>{
+      const aScore = deKeywords.filter(k => (a.name+' '+(a.description||'')).toLowerCase().includes(k)).length;
+      const bScore = deKeywords.filter(k => (b.name+' '+(b.description||'')).toLowerCase().includes(k)).length;
+      return bScore - aScore || b.stargazers_count - a.stargazers_count;
+    });
+
+    const langColors = {Python:'#3572A5',JavaScript:'#f1e05a',TypeScript:'#3178c6',Shell:'#89e051',SQL:'#e38c00',HTML:'#e34c26'};
+
+    grid.innerHTML = sorted.slice(0, 9).map(repo => `
+      <a href="${repo.html_url}" target="_blank" class="repo-card reveal">
+        <div class="repo-name">📁 ${repo.name}</div>
+        <div class="repo-desc">${repo.description || 'Data engineering repository'}</div>
+        <div class="repo-meta">
+          ${repo.language ? `<span class="repo-lang"><span class="lang-dot" style="background:${langColors[repo.language]||'#ccc'}"></span>${repo.language}</span>` : ''}
+          <span class="repo-stars">⭐ ${repo.stargazers_count}</span>
+          <span class="repo-lang">🍴 ${repo.forks_count}</span>
+        </div>
+      </a>
+    `).join('');
+
+    document.querySelectorAll('.repo-card.reveal').forEach(el => observer.observe(el));
+
+  } catch(e) {
+    showFallbackRepos(grid);
+  }
+}
+
+function showFallbackRepos(grid){
+  grid.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:30px 0;">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--text);margin-bottom:16px;">Visit GitHub profile to see all repositories:</p>
+      <a href="https://github.com/mjavedjs" target="_blank" class="btn-secondary" style="display:inline-block;">→ github.com/mjavedjs</a>
+    </div>
+  `;
+}
+
+loadGitHub();
+
+// ---- MOBILE HAMBURGER / DRAWER ----
+(function(){
+  const btn = document.getElementById('hamburger');
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('drawerOverlay');
+  const drawerLinks = document.querySelectorAll('.drawer-link');
+  let isOpen = false;
+
+  function openDrawer(){
+    isOpen = true;
+    btn.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer(){
+    isOpen = false;
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded','false');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', () => isOpen ? closeDrawer() : openDrawer());
+  overlay.addEventListener('click', closeDrawer);
+  drawerLinks.forEach(link => link.addEventListener('click', () => {
+    closeDrawer();
+  }));
+
+  // Close on escape
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && isOpen) closeDrawer();
+  });
+
+  // Nav background on scroll (already sticky, add scroll class for extra shadow)
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 20){
+      nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.4)';
+      nav.style.background = 'rgba(6,12,26,0.95)';
+    } else {
+      nav.style.boxShadow = '';
+      nav.style.background = 'rgba(6,12,26,0.85)';
+    }
+  }, {passive:true});
+})();
+
+// ---- MOBILE: REDUCE CANVAS ANIMATION ON LOW-END DEVICES ----
+(function(){
+  const isMobile = window.innerWidth < 768;
+  const isLowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+  if(isMobile && isLowPower){
+    // Slow down packet spawn rate
+    const canvas = document.getElementById('pipeline-canvas');
+    if(canvas) canvas.style.opacity = '0.4';
+  }
+})();
+
+// ---- LAZY LOAD IMAGES ----
+if('IntersectionObserver' in window){
+  const imgObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        const img = e.target;
+        if(img.dataset.src){
+          img.src = img.dataset.src;
+          imgObserver.unobserve(img);
+        }
+      }
+    });
+  },{rootMargin:'200px'});
+  document.querySelectorAll('img[data-src]').forEach(img => imgObserver.observe(img));
+}
 </script>
 </body>
 </html>
